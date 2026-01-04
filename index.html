@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="Screenshot 2026-01-04 062852.png" type="image/x-icon">
+    <title>Password Manager - Secure Your Digital Life</title>
+    <meta name="description"
+        content="A secure and modern password manager to store and manage all your passwords in one place.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-screen">
+        <div class="login-container">
+            <div class="login-icon">
+                <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L3 7V11C3 16.55 6.84 21.74 12 23C17.16 21.74 21 16.55 21 11V7L12 2Z"
+                        stroke="url(#gradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    <path
+                        d="M12 11C13.1046 11 14 10.1046 14 9C14 7.89543 13.1046 7 12 7C10.8954 7 10 7.89543 10 9C10 10.1046 10.8954 11 12 11Z"
+                        stroke="url(#gradient)" stroke-width="2" />
+                    <path d="M12 11V14M9 17H15" stroke="url(#gradient)" stroke-width="2" stroke-linecap="round" />
+                    <defs>
+                        <linearGradient id="gradient" x1="3" y1="2" x2="21" y2="23" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#667eea" />
+                            <stop offset="1" stop-color="#764ba2" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+            <h1>Password Manager</h1>
+            <p class="login-subtitle" id="loginSubtitle">Enter your master password to unlock your vault</p>
+            <form id="loginForm" class="login-form">
+                <div class="input-group" id="nameGroup" style="display: none;">
+                    <input type="text" id="userName" placeholder="Your Name" autocomplete="name">
+                </div>
+                <div class="input-group">
+                    <input type="email" id="loginEmail" placeholder="Email address" required autocomplete="email">
+                </div>
+                <div class="input-group">
+                    <input type="password" id="masterPassword" placeholder="Master password" required
+                        autocomplete="current-password" minlength="6">
+                </div>
+                <div class="input-group" id="confirmPasswordGroup" style="display: none;">
+                    <input type="password" id="confirmPassword" placeholder="Confirm master password"
+                        autocomplete="new-password" minlength="6">
+                </div>
+                <div id="errorMessage" class="error-message" style="display: none;"></div>
+                <button type="submit" class="btn-primary" id="authSubmitBtn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L3 7V11C3 16.55 6.84 21.74 12 23C17.16 21.74 21 16.55 21 11V7L12 2Z"
+                            stroke="currentColor" stroke-width="2" />
+                    </svg>
+                    <span id="submitBtnText">Unlock Vault</span>
+                </button>
+                <div class="auth-toggle">
+                    <p id="toggleText">Don't have a vault? <button type="button" id="toggleAuthMode"
+                            class="link-btn">Create New Vault</button></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="mainApp" class="main-app" style="display: none;">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L3 7V11C3 16.55 6.84 21.74 12 23C17.16 21.74 21 16.55 21 11V7L12 2Z"
+                            stroke="url(#gradient2)" stroke-width="2" />
+                        <defs>
+                            <linearGradient id="gradient2" x1="3" y1="2" x2="21" y2="23" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#667eea" />
+                                <stop offset="1" stop-color="#764ba2" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <span>PassVault</span>
+                </div>
+                <button class="btn-icon" id="lockVaultBtn" title="Lock Vault">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M19 11H5C3.89543 11 3 11.8954 3 13V20C3 21.1046 3.89543 22 5 22H19C20.1046 22 21 21.1046 21 20V13C21 11.8954 20.1046 11 19 11Z"
+                            stroke="currentColor" stroke-width="2" />
+                        <path d="M7 11V7C7 4.23858 9.23858 2 12 2C14.7614 2 17 4.23858 17 7V11" stroke="currentColor"
+                            stroke-width="2" />
+                    </svg>
+                </button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <button class="nav-item active" data-category="all">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="3" y="3" width="7" height="7" stroke="currentColor" stroke-width="2" />
+                        <rect x="14" y="3" width="7" height="7" stroke="currentColor" stroke-width="2" />
+                        <rect x="3" y="14" width="7" height="7" stroke="currentColor" stroke-width="2" />
+                        <rect x="14" y="14" width="7" height="7" stroke="currentColor" stroke-width="2" />
+                    </svg>
+                    <span>All Items</span>
+                    <span class="count" id="allCount">0</span>
+                </button>
+                <button class="nav-item" data-category="favorites">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+                            stroke="currentColor" stroke-width="2" />
+                    </svg>
+                    <span>Favorites</span>
+                    <span class="count" id="favCount">0</span>
+                </button>
+                <button class="nav-item" data-category="banking">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z"
+                            stroke="currentColor" stroke-width="2" />
+                        <path d="M9 22V12H15V22" stroke="currentColor" stroke-width="2" />
+                    </svg>
+                    <span>Banking</span>
+                    <span class="count" id="bankingCount">0</span>
+                </button>
+                <button class="nav-item" data-category="social">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21"
+                            stroke="currentColor" stroke-width="2" />
+                        <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2" />
+                        <path
+                            d="M23 21V19C22.9993 18.1137 22.7044 17.2528 22.1614 16.5523C21.6184 15.8519 20.8581 15.3516 20 15.13"
+                            stroke="currentColor" stroke-width="2" />
+                        <path
+                            d="M16 3.13C16.8604 3.35031 17.623 3.85071 18.1676 4.55232C18.7122 5.25392 19.0078 6.11683 19.0078 7.005C19.0078 7.89318 18.7122 8.75608 18.1676 9.45769C17.623 10.1593 16.8604 10.6597 16 10.88"
+                            stroke="currentColor" stroke-width="2" />
+                    </svg>
+                    <span>Social Media</span>
+                    <span class="count" id="socialCount">0</span>
+                </button>
+                <button class="nav-item" data-category="work">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M20 7H4C2.89543 7 2 7.89543 2 9V19C2 20.1046 2.89543 21 4 21H20C21.1046 21 22 20.1046 22 19V9C22 7.89543 21.1046 7 20 7Z"
+                            stroke="currentColor" stroke-width="2" />
+                        <path
+                            d="M16 21V5C16 4.46957 15.7893 3.96086 15.4142 3.58579C15.0391 3.21071 14.5304 3 14 3H10C9.46957 3 8.96086 3.21071 8.58579 3.58579C8.21071 3.96086 8 4.46957 8 5V21"
+                            stroke="currentColor" stroke-width="2" />
+                    </svg>
+                    <span>Work</span>
+                    <span class="count" id="workCount">0</span>
+                </button>
+            </nav>
+        </aside>
+
+        <!-- Mobile Overlay -->
+        <div class="mobile-overlay" id="mobileOverlay"></div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-bar">
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" />
+                    </svg>
+                </button>
+                <div class="search-bar">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2" />
+                        <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                    </svg>
+                    <input type="text" id="searchInput" placeholder="Search passwords...">
+                </div>
+                <button class="btn-add" id="addNewBtn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                    </svg>
+                    <span>Add New</span>
+                </button>
+            </header>
+
+            <div class="content-area">
+                <h2 id="categoryTitle">All Items</h2>
+                <div id="passwordGrid" class="password-grid">
+                    <!-- Password cards will be inserted here -->
+                </div>
+                <div id="emptyState" class="empty-state" style="display: none;">
+                    <svg width="120" height="120" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L3 7V11C3 16.55 6.84 21.74 12 23C17.16 21.74 21 16.55 21 11V7L12 2Z"
+                            stroke="currentColor" stroke-width="1.5" opacity="0.3" />
+                    </svg>
+                    <h3>No passwords found</h3>
+                    <p>Add your first password to get started</p>
+                    <button class="btn-primary" onclick="document.getElementById('addNewBtn').click()">Add
+                        Password</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Password Detail Modal -->
+    <div id="passwordModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add New Password</h2>
+                <button class="btn-icon" id="closeModalBtn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                    </svg>
+                </button>
+            </div>
+            <form id="passwordForm" class="password-form">
+                <input type="hidden" id="passwordId">
+
+                <div class="form-group">
+                    <label for="websiteUrl">Website URL</label>
+                    <input type="url" id="websiteUrl" placeholder="https://example.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="accountName">Account Name</label>
+                    <input type="text" id="accountName" placeholder="My Account" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="username">Username / Email</label>
+                    <input type="text" id="username" placeholder="user@example.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="password-input-group">
+                        <input type="password" id="password" placeholder="Enter password" required>
+                        <button type="button" class="btn-icon" id="togglePasswordBtn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12C23 12 19 20 12 20C5 20 1 12 1 12Z"
+                                    stroke="currentColor" stroke-width="2" />
+                                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" />
+                            </svg>
+                        </button>
+                        <button type="button" class="btn-icon" id="openGeneratorBtn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M21.5 2V8M21.5 8H15.5M21.5 8L18 4.5C16.7429 3.24286 15.1767 2.34603 13.4606 1.90717C11.7446 1.46831 9.94042 1.50378 8.24419 2.00937C6.54797 2.51495 5.01849 3.47283 3.81199 4.78072C2.60549 6.08861 1.76925 7.69577 1.39258 9.43137"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                                <path
+                                    d="M2.5 22V16M2.5 16H8.5M2.5 16L6 19.5C7.25714 20.7571 8.82332 21.654 10.5394 22.0928C12.2554 22.5317 14.0596 22.4962 15.7558 21.9906C17.452 21.485 18.9815 20.5272 20.188 19.2193C21.3945 17.9114 22.2308 16.3042 22.6074 14.5686"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="strength-meter">
+                        <div class="strength-bar">
+                            <div id="strengthProgress" class="strength-progress"></div>
+                        </div>
+                        <span id="strengthText" class="strength-text">No password</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <select id="category" required>
+                        <option value="banking">Banking</option>
+                        <option value="social">Social Media</option>
+                        <option value="work">Work</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="notes">Notes (Optional)</label>
+                    <textarea id="notes" placeholder="Add any additional notes..." rows="3"></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H16L21 8V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21Z"
+                                stroke="currentColor" stroke-width="2" />
+                            <path d="M17 21V13H7V21M7 3V8H15" stroke="currentColor" stroke-width="2" />
+                        </svg>
+                        Save Password
+                    </button>
+                    <button type="button" class="btn-secondary" id="cancelBtn">Cancel</button>
+                    <button type="button" class="btn-danger" id="deleteBtn" style="display: none;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 6H5H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                            <path
+                                d="M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z"
+                                stroke="currentColor" stroke-width="2" />
+                        </svg>
+                        Delete
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Password Generator Modal -->
+    <div id="generatorModal" class="modal">
+        <div class="modal-content generator-modal">
+            <div class="modal-header">
+                <h2>Password Generator</h2>
+                <button class="btn-icon" id="closeGeneratorBtn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="generator-content">
+                <div class="generated-password">
+                    <input type="text" id="generatedPassword" readonly value="Click generate to create password">
+                    <button class="btn-icon" id="copyGeneratedBtn" title="Copy to clipboard">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor" stroke-width="2" />
+                            <path
+                                d="M5 15H4C3.46957 15 2.96086 14.7893 2.58579 14.4142C2.21071 14.0391 2 13.5304 2 13V4C2 3.46957 2.21071 2.96086 2.58579 2.58579C2.96086 2.21071 3.46957 2 4 2H13C13.5304 2 14.0391 2.21071 14.4142 2.58579C14.7893 2.96086 15 3.46957 15 4V5"
+                                stroke="currentColor" stroke-width="2" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="generator-strength">
+                    <div class="strength-bar">
+                        <div id="genStrengthProgress" class="strength-progress"></div>
+                    </div>
+                    <span id="genStrengthText" class="strength-text">No password</span>
+                </div>
+
+                <div class="generator-options">
+                    <div class="option-group">
+                        <label for="passwordLength">Password Length: <span id="lengthValue">16</span></label>
+                        <input type="range" id="passwordLength" min="8" max="64" value="16">
+                    </div>
+
+                    <div class="option-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="includeUppercase" checked>
+                            <span>Uppercase Letters (A-Z)</span>
+                        </label>
+                    </div>
+
+                    <div class="option-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="includeLowercase" checked>
+                            <span>Lowercase Letters (a-z)</span>
+                        </label>
+                    </div>
+
+                    <div class="option-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="includeNumbers" checked>
+                            <span>Numbers (0-9)</span>
+                        </label>
+                    </div>
+
+                    <div class="option-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="includeSymbols" checked>
+                            <span>Special Symbols (!@#$%^&*)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="generator-actions">
+                    <button class="btn-primary" id="generateBtn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M21.5 2V8M21.5 8H15.5M21.5 8L18 4.5C16.7429 3.24286 15.1767 2.34603 13.4606 1.90717C11.7446 1.46831 9.94042 1.50378 8.24419 2.00937C6.54797 2.51495 5.01849 3.47283 3.81199 4.78072C2.60549 6.08861 1.76925 7.69577 1.39258 9.43137"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                            <path
+                                d="M2.5 22V16M2.5 16H8.5M2.5 16L6 19.5C7.25714 20.7571 8.82332 21.654 10.5394 22.0928C12.2554 22.5317 14.0596 22.4962 15.7558 21.9906C17.452 21.485 18.9815 20.5272 20.188 19.2193C21.3945 17.9114 22.2308 16.3042 22.6074 14.5686"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                        </svg>
+                        Generate Password
+                    </button>
+                    <button class="btn-secondary" id="usePasswordBtn">Use This Password</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
